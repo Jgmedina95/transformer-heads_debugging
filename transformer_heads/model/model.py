@@ -193,12 +193,19 @@ class HeadedModel(ABC, PreTrainedModel):
                             for i in range(use_logits.shape[0])
                         ]
                     )
-                    use_labels = torch.concatenate(
-                        [
-                            use_labels[i, : sequence_lengths[i]]
-                            for i in range(use_labels.shape[0])
-                        ]
-                    )
+                    try:
+                        use_labels = torch.concatenate(
+                            [
+                                use_labels[i, : sequence_lengths[i]]
+                                for i in range(use_labels.shape[0])
+                            ]
+                        )
+                    except Exception as e:
+                        print("Im recovering the exception")
+                        print(e)
+                        print(use_labels)
+                        print(np.shape(use_labels))
+                        raise Exception
                 else:
                     use_labels = use_labels.view(-1)
 
